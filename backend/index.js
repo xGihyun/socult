@@ -1,12 +1,14 @@
-const express = require('express');
-const mongoose = require('mongoose');
-const path = require('path');
-const cookieParser = require('cookie-parser');
-const userRouter = require('./routes/UserRoutes');
-const authRouter = require('./routes/AuthRoutes');
+import express from 'express';
+import mongoose from 'mongoose';
+// import path from 'path';
+import cookieParser from 'cookie-parser';
+import { handler } from '../frontend/build/handler.js';
+// const userRouter = require('./routes/UserRoutes');
+import authRouter from './routes/AuthRoutes.js';
+import dotenv from 'dotenv';
 const app = express();
-
-require('dotenv');
+dotenv.config();
+// require('dotenv').config();
 
 mongoose.connect(process.env.MONGODB_URI, {
     useNewUrlParser: true,
@@ -21,7 +23,7 @@ mongoose.connect(process.env.MONGODB_URI, {
 // app.use(bodyParser.urlencoded({ extended: true }));
 app.use(cookieParser());
 app.use(express.json());
-app.use(express.static(path.join(__dirname, 'public')))
+// app.use(express.static(path.join(__dirname, 'public')))
 
 // For login (signing in), creating account (signing up), 
 app.options('*', (req, res, next) => {
@@ -34,12 +36,16 @@ app.options('*', (req, res, next) => {
 });
 
 // User friends (like friends list actions and such)
-app.use("/api/user", userRouter) 
+// TODO: Create another route in the future
+
 // User authentication (registering, logging in)
 app.use("/api/auth", authRouter)
 
-app.listen(process.env.PORT || 3000, () => {
-   console.log(`Server started at port ${process.env.PORT}\n`);
+// Run both frontend and backend
+app.use(handler);
+
+app.listen(process.env.PORT || 3030, () => {
+   console.log(`Server started at port ${process.env.PORT || 3030}`);
 });
 
 

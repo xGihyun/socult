@@ -1,6 +1,6 @@
 .DS_Store
 .cache/
-node_modules/
+node_modules
 /build
 /.svelte-kit
 /package
